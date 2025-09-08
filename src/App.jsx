@@ -26,28 +26,68 @@ import LinkButton from './components/LinkButton';
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [mounted, setMounted] = useState(false);
+    const [isManuallySet, setIsManuallySet] = useState(false);
 
     const theme = createMonochromeTheme(isDarkMode);
 
-    // Load preferences from localStorage
+    // Function to get system theme preference
+    const getSystemTheme = () => {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+
+    // Load preferences from localStorage and set up system theme detection
     useEffect(() => {
         const savedTheme = localStorage.getItem('themePreference');
+        const savedManualFlag = localStorage.getItem('themeManuallySet');
 
-        if (savedTheme) {
+        if (savedTheme && savedManualFlag === 'true') {
+            // User has manually set a theme preference
             setIsDarkMode(savedTheme === 'dark');
+            setIsManuallySet(true);
+        } else {
+            // Use system theme preference
+            setIsDarkMode(getSystemTheme());
+            setIsManuallySet(false);
         }
+
         setMounted(true);
     }, []);
+
+    // Listen for system theme changes (only if not manually set)
+    useEffect(() => {
+        if (!isManuallySet && mounted) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            const handleSystemThemeChange = (e) => {
+                setIsDarkMode(e.matches);
+            };
+
+            mediaQuery.addEventListener('change', handleSystemThemeChange);
+
+            return () => {
+                mediaQuery.removeEventListener('change', handleSystemThemeChange);
+            };
+        }
+    }, [isManuallySet, mounted]);
 
     // Save preferences to localStorage
     useEffect(() => {
         if (mounted) {
             localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
+            localStorage.setItem('themeManuallySet', isManuallySet.toString());
         }
-    }, [isDarkMode, mounted]);
+    }, [isDarkMode, isManuallySet, mounted]);
 
     const toggleTheme = () => {
         setIsDarkMode(prev => !prev);
+        setIsManuallySet(true); // Mark as manually set when user clicks toggle
+    };
+
+    // Optional: Add a function to reset to system theme
+    const resetToSystemTheme = () => {
+        setIsDarkMode(getSystemTheme());
+        setIsManuallySet(false);
+        localStorage.removeItem('themeManuallySet');
     };
 
     const profileData = {
@@ -112,6 +152,7 @@ function App() {
                     size="large"
                     sx={{
                         backgroundColor: 'rgba(128, 128, 128, 0.1)',
+                        border: isManuallySet ? '2px solid rgba(128, 128, 128, 0.3)' : 'none',
                         '&:hover': {
                             backgroundColor: 'rgba(128, 128, 128, 0.2)',
                         },
@@ -196,6 +237,11 @@ function App() {
                             <Typography variant="caption" display="block">
                                 Built with React & Material-UI
                             </Typography>
+                            {!isManuallySet && (
+                                <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+                                    Theme follows system preference
+                                </Typography>
+                            )}
                         </Box>
                     </Box>
                 </Fade>
