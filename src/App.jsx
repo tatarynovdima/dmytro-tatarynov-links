@@ -9,8 +9,6 @@ import {
     IconButton,
     Stack,
     Fade,
-    Switch,
-    FormControlLabel,
 } from '@mui/material';
 import {
     GitHub,
@@ -20,7 +18,6 @@ import {
     Code,
     Article,
     Telegram,
-    AutoMode,
 } from '@mui/icons-material';
 
 import { createMonochromeTheme } from './theme';
@@ -28,7 +25,6 @@ import LinkButton from './components/LinkButton';
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(true);
-    const [isAutoMode, setIsAutoMode] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     const theme = createMonochromeTheme(isDarkMode);
@@ -36,35 +32,12 @@ function App() {
     // Load preferences from localStorage
     useEffect(() => {
         const savedTheme = localStorage.getItem('themePreference');
-        const savedAutoMode = localStorage.getItem('autoTheme') === 'true';
 
         if (savedTheme) {
             setIsDarkMode(savedTheme === 'dark');
         }
-        setIsAutoMode(savedAutoMode);
         setMounted(true);
     }, []);
-
-    // Auto theme based on time of day
-    useEffect(() => {
-        if (!isAutoMode) return;
-
-        const updateThemeByTime = () => {
-            const now = new Date();
-            const hour = now.getHours();
-            // Dark mode from 7 PM to 6 AM (19:00 - 06:00)
-            const shouldBeDark = hour >= 19 || hour < 6;
-            setIsDarkMode(shouldBeDark);
-        };
-
-        // Update immediately
-        updateThemeByTime();
-
-        // Set up interval to check every minute
-        const interval = setInterval(updateThemeByTime, 60000);
-
-        return () => clearInterval(interval);
-    }, [isAutoMode]);
 
     // Save preferences to localStorage
     useEffect(() => {
@@ -73,32 +46,8 @@ function App() {
         }
     }, [isDarkMode, mounted]);
 
-    useEffect(() => {
-        if (mounted) {
-            localStorage.setItem('autoTheme', isAutoMode.toString());
-        }
-    }, [isAutoMode, mounted]);
-
     const toggleTheme = () => {
-        if (isAutoMode) {
-            setIsAutoMode(false);
-        }
         setIsDarkMode(prev => !prev);
-    };
-
-    const toggleAutoMode = () => {
-        setIsAutoMode(prev => !prev);
-    };
-
-    const getCurrentTimeBasedIcon = () => {
-        const now = new Date();
-        const hour = now.getHours();
-
-        if (isAutoMode) {
-            return <AutoMode />;
-        }
-
-        return isDarkMode ? <LightMode /> : <DarkMode />;
     };
 
     const profileData = {
@@ -155,83 +104,22 @@ function App() {
                     top: 16,
                     right: 16,
                     zIndex: 1000,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 1,
-                    alignItems: 'flex-end',
                 }}
             >
-                {/* Auto Mode Toggle */}
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isAutoMode}
-                            onChange={toggleAutoMode}
-                            size="small"
-                            sx={{
-                                '& .MuiSwitch-thumb': {
-                                    color: isDarkMode ? '#ffffff' : '#000000',
-                                },
-                                '& .MuiSwitch-track': {
-                                    backgroundColor: isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
-                                },
-                            }}
-                        />
-                    }
-                    label={
-                        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
-                            Auto
-                        </Typography>
-                    }
-                    sx={{
-                        margin: 0,
-                        '& .MuiFormControlLabel-label': {
-                            color: isDarkMode ? '#ffffff' : '#000000',
-                        },
-                    }}
-                />
-
-                {/* Manual Theme Toggle */}
                 <IconButton
                     onClick={toggleTheme}
-                    disabled={isAutoMode}
-                    aria-label={
-                        isAutoMode
-                            ? 'Auto theme mode is enabled'
-                            : `Switch to ${isDarkMode ? 'light' : 'dark'} mode`
-                    }
+                    aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
                     size="large"
                     sx={{
                         backgroundColor: 'rgba(128, 128, 128, 0.1)',
-                        opacity: isAutoMode ? 0.5 : 1,
                         '&:hover': {
-                            backgroundColor: isAutoMode
-                                ? 'rgba(128, 128, 128, 0.1)'
-                                : 'rgba(128, 128, 128, 0.2)',
+                            backgroundColor: 'rgba(128, 128, 128, 0.2)',
                         },
                         transition: 'all 0.3s ease',
                     }}
                 >
-                    {getCurrentTimeBasedIcon()}
+                    {isDarkMode ? <LightMode /> : <DarkMode />}
                 </IconButton>
-
-                {/* Time Display for Auto Mode */}
-                {isAutoMode && (
-                    <Typography
-                        variant="caption"
-                        sx={{
-                            fontSize: '0.6rem',
-                            opacity: 0.7,
-                            textAlign: 'center',
-                            color: isDarkMode ? '#ffffff' : '#000000',
-                        }}
-                    >
-                        {new Date().toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        })}
-                    </Typography>
-                )}
             </Box>
 
             <Container
@@ -308,11 +196,6 @@ function App() {
                             <Typography variant="caption" display="block">
                                 Built with React & Material-UI
                             </Typography>
-                            {isAutoMode && (
-                                <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                                    Theme changes automatically: Dark (7 PM - 6 AM) • Light (6 AM - 7 PM)
-                                </Typography>
-                            )}
                         </Box>
                     </Box>
                 </Fade>
