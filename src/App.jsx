@@ -22,11 +22,11 @@ import {
 
 import { createMonochromeTheme } from './theme';
 import LinkButton from './components/LinkButton';
+import CursorFollower from './components/CursorFollower';
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [mounted, setMounted] = useState(false);
-    const [isManuallySet, setIsManuallySet] = useState(false);
 
     const theme = createMonochromeTheme(isDarkMode);
 
@@ -35,27 +35,15 @@ function App() {
         return window.matchMedia('(prefers-color-scheme: dark)').matches;
     };
 
-    // Load preferences from localStorage and set up system theme detection
+    // Set initial theme based on system preference
     useEffect(() => {
-        const savedTheme = localStorage.getItem('themePreference');
-        const savedManualFlag = localStorage.getItem('themeManuallySet');
-
-        if (savedTheme && savedManualFlag === 'true') {
-            // User has manually set a theme preference
-            setIsDarkMode(savedTheme === 'dark');
-            setIsManuallySet(true);
-        } else {
-            // Use system theme preference
-            setIsDarkMode(getSystemTheme());
-            setIsManuallySet(false);
-        }
-
+        setIsDarkMode(getSystemTheme());
         setMounted(true);
     }, []);
 
-    // Listen for system theme changes (only if not manually set)
+    // Listen for system theme changes
     useEffect(() => {
-        if (!isManuallySet && mounted) {
+        if (mounted) {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
             const handleSystemThemeChange = (e) => {
@@ -68,26 +56,10 @@ function App() {
                 mediaQuery.removeEventListener('change', handleSystemThemeChange);
             };
         }
-    }, [isManuallySet, mounted]);
-
-    // Save preferences to localStorage
-    useEffect(() => {
-        if (mounted) {
-            localStorage.setItem('themePreference', isDarkMode ? 'dark' : 'light');
-            localStorage.setItem('themeManuallySet', isManuallySet.toString());
-        }
-    }, [isDarkMode, isManuallySet, mounted]);
+    }, [mounted]);
 
     const toggleTheme = () => {
         setIsDarkMode(prev => !prev);
-        setIsManuallySet(true); // Mark as manually set when user clicks toggle
-    };
-
-    // Optional: Add a function to reset to system theme
-    const resetToSystemTheme = () => {
-        setIsDarkMode(getSystemTheme());
-        setIsManuallySet(false);
-        localStorage.removeItem('themeManuallySet');
     };
 
     const profileData = {
@@ -128,7 +100,7 @@ function App() {
                 icon: <Telegram />,
                 text: 'Telegram',
                 variant: 'outlined',
-                ariaLabel: 'Contact Dmytro Tatarynov on Telegram'
+                ariaLabel: 'Visit Dmytro Tatarynov Telegram'
             },
         ]
     };
@@ -136,6 +108,9 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+
+            {/* Cursor Follower Effect */}
+            <CursorFollower isDarkMode={isDarkMode} />
 
             {/* Theme Controls */}
             <Box
@@ -152,7 +127,6 @@ function App() {
                     size="large"
                     sx={{
                         backgroundColor: 'rgba(128, 128, 128, 0.1)',
-                        border: isManuallySet ? '2px solid rgba(128, 128, 128, 0.3)' : 'none',
                         '&:hover': {
                             backgroundColor: 'rgba(128, 128, 128, 0.2)',
                         },
@@ -237,11 +211,6 @@ function App() {
                             <Typography variant="caption" display="block">
                                 Built with React & Material-UI
                             </Typography>
-                            {!isManuallySet && (
-                                <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
-                                    Theme follows system preference
-                                </Typography>
-                            )}
                         </Box>
                     </Box>
                 </Fade>
