@@ -109,6 +109,65 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
 
+            {/* Background Elements */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: isDarkMode
+                        ? 'radial-gradient(circle at 15% 50%, rgba(33, 33, 33, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%)'
+                        : 'radial-gradient(circle at 15% 50%, rgba(245, 245, 245, 0.9) 0%, rgba(224, 224, 224, 0.95) 100%)',
+                    zIndex: -1,
+                }}
+            />
+
+            {/* Animated Background Elements */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: -1,
+                    overflow: 'hidden',
+                    opacity: 0.3,
+                }}
+            >
+                {[...Array(5)].map((_, i) => (
+                    <Box
+                        key={i}
+                        sx={{
+                            position: 'absolute',
+                            width: 100 + i * 50,
+                            height: 100 + i * 50,
+                            borderRadius: '50%',
+                            background: isDarkMode
+                                ? `rgba(128, 128, 128, ${0.1 + i * 0.1})`
+                                : `rgba(128, 128, 128, ${0.05 + i * 0.1})`,
+                            top: `${20 + i * 10}%`,
+                            left: `${5 + i * 5}%`,
+                            animation: 'float 15s ease-in-out infinite',
+                            animationDelay: `${i * 2}s`,
+                            '@keyframes float': {
+                                '0%': {
+                                    transform: 'translateY(0) rotate(0deg)',
+                                },
+                                '50%': {
+                                    transform: `translateY(${20 + i * 5}px) rotate(${90 + i * 30}deg)`,
+                                },
+                                '100%': {
+                                    transform: 'translateY(0) rotate(0deg)',
+                                },
+                            },
+                        }}
+                    />
+                ))}
+            </Box>
+
             {/* Cursor Follower Effect */}
             <CursorFollower isDarkMode={isDarkMode} />
 
@@ -127,6 +186,7 @@ function App() {
                     size="large"
                     sx={{
                         backgroundColor: 'rgba(128, 128, 128, 0.1)',
+                        backdropFilter: 'blur(10px)',
                         '&:hover': {
                             backgroundColor: 'rgba(128, 128, 128, 0.2)',
                         },
@@ -145,14 +205,25 @@ function App() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     py: 4,
+                    position: 'relative',
                 }}
             >
                 <Fade in={mounted} timeout={1000}>
                     <Box
                         sx={{
                             width: '100%',
-                            maxWidth: 420,
+                            maxWidth: 450,
                             textAlign: 'center',
+                            background: isDarkMode
+                                ? 'rgba(18, 18, 18, 0.7)'
+                                : 'rgba(255, 255, 255, 0.7)',
+                            backdropFilter: 'blur(10px)',
+                            borderRadius: 4,
+                            p: 4,
+                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+                            border: isDarkMode
+                                ? '1px solid rgba(255, 255, 255, 0.1)'
+                                : '1px solid rgba(0, 0, 0, 0.1)',
                         }}
                     >
                         <Stack spacing={3} alignItems="center" sx={{ mb: 4 }}>
@@ -160,40 +231,52 @@ function App() {
                                 src={profileData.avatar}
                                 alt={`${profileData.name} profile picture`}
                                 sx={{
-                                    width: 120,
-                                    height: 120,
+                                    width: 140,
+                                    height: 140,
                                     fontSize: '3rem',
                                     fontWeight: 'bold',
-                                    mb: 1,
+                                    mb: 2,
+                                    border: isDarkMode
+                                        ? '3px solid rgba(255, 255, 255, 0.2)'
+                                        : '3px solid rgba(0, 0, 0, 0.1)',
+                                    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
                                 }}
                             >
                                 {profileData.name.split(' ').map(name => name[0]).join('')}
                             </Avatar>
 
                             <Typography
-                                variant="h5"
+                                variant="h4"
                                 component="h1"
                                 sx={{
-                                    fontWeight: 600,
+                                    fontWeight: 700,
                                     mb: 1,
+                                    background: isDarkMode
+                                        ? 'linear-gradient(45deg, #fff, #aaa)'
+                                        : 'linear-gradient(45deg, #000, #444)',
+                                    backgroundClip: 'text',
+                                    textFillColor: 'transparent',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
                                 }}
                             >
                                 {profileData.name}
                             </Typography>
 
                             <Typography
-                                variant="body2"
+                                variant="body1"
                                 color="text.secondary"
                                 sx={{
-                                    opacity: 0.8,
+                                    opacity: 0.9,
                                     maxWidth: 300,
+                                    fontSize: '1.1rem',
                                 }}
                             >
                                 {profileData.bio}
                             </Typography>
                         </Stack>
 
-                        <Stack spacing={0} sx={{ width: '100%' }}>
+                        <Stack spacing={1.5} sx={{ width: '100%' }}>
                             {profileData.links.map((link, index) => (
                                 <LinkButton
                                     key={index}
