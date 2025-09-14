@@ -62,7 +62,7 @@ function App() {
     const profileData = {
         name: 'Dmytro Tatarynov',
         bio: 'Software Engineer with 5+ years experience',
-        avatar: './photo_2023-02-19_19-07-52.jpg',
+        avatar: 'public/photo_2025-09-14_21-30-33.jpg',
         links: [
             {
                 href: 'https://www.linkedin.com/in/tatarynov-dmytro/',
@@ -233,6 +233,7 @@ function App() {
                                         ? '3px solid rgba(255, 255, 255, 0.2)'
                                         : '3px solid rgba(0, 0, 0, 0.1)',
                                     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
+                                    transform: 'rotate(-25deg)', // Додаємо поворот на 90 градусів
                                 }}
                             >
                                 {profileData.name.split(' ').map(name => name[0]).join('')}
