@@ -62,7 +62,7 @@ function App() {
     const profileData = {
         name: 'Dmytro Tatarynov',
         bio: 'Software Engineer with 5+ years experience',
-        avatar: 'public/photo_2025-09-14_21-30-33.jpg',
+        avatar: './photo_2025-09-14_21-30-33.jpg',
         links: [
             {
                 href: 'https://www.linkedin.com/in/tatarynov-dmytro/',
