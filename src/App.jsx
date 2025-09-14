@@ -233,7 +233,7 @@ function App() {
                                         ? '3px solid rgba(255, 255, 255, 0.2)'
                                         : '3px solid rgba(0, 0, 0, 0.1)',
                                     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
-                                    transform: 'rotate(-25deg)', // Додаємо поворот на 90 градусів
+                                    transform: 'rotate(-25deg)',
                                 }}
                             >
                                 {profileData.name.split(' ').map(name => name[0]).join('')}
