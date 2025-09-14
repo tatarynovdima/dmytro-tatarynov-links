@@ -41,12 +41,11 @@ export const createMonochromeTheme = (isDarkMode) => {
                 opacity: 0.8,
             },
         },
-        spacing: 8, // Default MUI spacing unit
+        spacing: 8,
         shape: {
             borderRadius: 8,
         },
         components: {
-            // Customize MUI components for monochrome theme
             MuiCssBaseline: {
                 styleOverrides: {
                     body: {

@@ -30,18 +30,15 @@ function App() {
 
     const theme = createMonochromeTheme(isDarkMode);
 
-    // Function to get system theme preference
     const getSystemTheme = () => {
         return window.matchMedia('(prefers-color-scheme: dark)').matches;
     };
 
-    // Set initial theme based on system preference
     useEffect(() => {
         setIsDarkMode(getSystemTheme());
         setMounted(true);
     }, []);
 
-    // Listen for system theme changes
     useEffect(() => {
         if (mounted) {
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -109,7 +106,6 @@ function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
 
-            {/* Background Elements */}
             <Box
                 sx={{
                     position: 'fixed',
@@ -124,7 +120,6 @@ function App() {
                 }}
             />
 
-            {/* Animated Background Elements */}
             <Box
                 sx={{
                     position: 'fixed',
@@ -168,10 +163,8 @@ function App() {
                 ))}
             </Box>
 
-            {/* Cursor Follower Effect */}
             <CursorFollower isDarkMode={isDarkMode} />
 
-            {/* Theme Controls */}
             <Box
                 sx={{
                     position: 'fixed',
