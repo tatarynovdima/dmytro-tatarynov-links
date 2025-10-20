@@ -65,7 +65,7 @@ function App() {
         avatar: './photo_2025-09-14_21-30-33.jpg',
         links: [
             {
-                href: 'https://www.linkedin.com/in/tatarynov-dmytro/',
+                href: 'https://www.linkedin.com/in/dmytro-tatarynov/',
                 icon: <LinkedIn />,
                 text: 'LinkedIn',
                 variant: 'contained',
