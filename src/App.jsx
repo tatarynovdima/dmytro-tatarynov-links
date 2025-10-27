@@ -60,44 +60,44 @@ function App() {
     };
 
     const profileData = {
-        name: 'Dmytro Tatarynov',
+        name: 'Dima Tatarynov',
         bio: 'Software Engineer with 5+ years experience',
         avatar: './photo_2025-09-14_21-30-33.jpg',
         links: [
             {
-                href: 'https://www.linkedin.com/in/dmytro-tatarynov/',
+                href: 'https://www.linkedin.com/in/dima-tatarynov/',
                 icon: <LinkedIn />,
                 text: 'LinkedIn',
                 variant: 'contained',
-                ariaLabel: 'Visit Dmytro Tatarynov LinkedIn profile'
+                ariaLabel: 'Visit Dima Tatarynov LinkedIn profile'
             },
             {
                 href: 'https://github.com/tatarynovdima',
                 icon: <GitHub />,
                 text: 'GitHub',
                 variant: 'outlined',
-                ariaLabel: 'Visit Dmytro Tatarynov GitHub profile'
+                ariaLabel: 'Visit Dima Tatarynov GitHub profile'
             },
             {
                 href: 'https://leetcode.com/u/tatarynovdima/',
                 icon: <Code />,
                 text: 'LeetCode',
                 variant: 'outlined',
-                ariaLabel: 'Visit Dmytro Tatarynov LeetCode profile'
+                ariaLabel: 'Visit Dima Tatarynov LeetCode profile'
             },
             {
                 href: 'https://medium.com/@dmytro.tatarynov',
                 icon: <Article />,
                 text: 'Medium',
                 variant: 'outlined',
-                ariaLabel: 'Visit Dmytro Tatarynov Medium blog'
+                ariaLabel: 'Visit Dima Tatarynov Medium blog'
             },
             {
-                href: 'https://t.me/dmytro_tatarynov',
+                href: 'https://t.me/dima_tatarynov',
                 icon: <Telegram />,
                 text: 'Telegram',
                 variant: 'outlined',
-                ariaLabel: 'Visit Dmytro Tatarynov Telegram'
+                ariaLabel: 'Visit Dima Tatarynov Telegram'
             },
         ]
     };
